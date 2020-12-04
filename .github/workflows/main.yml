@@ -1,4 +1,4 @@
-ame: Main CI & Coverage Reporting
+name: Main CI & Coverage Reporting
 
 on:
     push:
