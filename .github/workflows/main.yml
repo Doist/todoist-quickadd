@@ -1,0 +1,39 @@
+ame: Main CI & Coverage Reporting
+
+on:
+    push:
+        branches:
+            - main
+    pull_request:
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v2
+
+            - name: Setup Node 12
+              uses: actions/setup-node@v1
+              with:
+                  node-version: 12.x
+
+            - name: Install dependencies
+              run: npm ci
+
+            - name: Lint
+              run: npm run lint
+              env:
+                  CI: true
+
+            - name: Test
+              run: npm run test:ci
+
+            - name: Build
+              run: npm run build
+
+            - name: Upload to coveralls
+              uses: coverallsapp/github-action@v1.1.2
+              with:
+                  github-token: ${{ secrets.GITHUB_TOKEN }}

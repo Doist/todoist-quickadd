@@ -1,0 +1,52 @@
+name: Release package
+
+on:
+    release:
+        types: [created]
+    workflow_dispatch:
+
+jobs:
+    publish:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v2
+
+            - name: Setup Node 12
+              uses: actions/setup-node@v1
+              with:
+                  node-version: 12
+
+            - name: Install dependencies
+              run: npm ci
+
+            - name: Lint
+              run: npm run lint
+              env:
+                  CI: true
+
+            - name: Test
+              run: npm run test:ci
+
+            - name: Build
+              run: npm run build
+
+            - name: Publish to GitHub Package Registry
+              uses: actions/setup-node@v1
+              with:
+                  node-version: 12
+                  registry-url: https://npm.pkg.github.com/
+                  scope: '@doist'
+            - run: npm publish
+              env:
+                  NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+            - name: Publish to npm registry
+              uses: actions/setup-node@v1
+              with:
+                  node-version: 12
+                  registry-url: https://registry.npmjs.org/
+                  scope: '@doist'
+            - run: npm publish
+              env:
+                  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
