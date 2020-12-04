@@ -80,13 +80,13 @@ export function showQuickAdd(parms: ShowParams = {}) {
 
 function remove() {
     if (IFRAME) {
-        teardownDataBus()
-        clearLoadingTimeout()
-        IFRAME = null
-        LOADED = false
-        CURRENT_PARAMS = null
         IFRAME.remove()
     }
+    teardownDataBus()
+    clearLoadingTimeout()
+    IFRAME = null
+    LOADED = false
+    CURRENT_PARAMS = null
 }
 
 function dataBus(event: MessageEvent) {
