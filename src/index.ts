@@ -16,7 +16,6 @@ const LOADING_TIMEOUT = 5000 // 5 seconds
 let TIMEOUT_FN: ReturnType<typeof setTimeout>
 let IFRAME: HTMLElement | null = null
 let LOADED = false
-let DATA_BUS_CREATED = false
 let CURRENT_PARAMS: ShowParams | null = null
 
 export function showQuickAdd(parms: ShowParams = {}) {
@@ -31,14 +30,11 @@ export function showQuickAdd(parms: ShowParams = {}) {
         content = '[' + title + ']' + '(' + window.location + ')'
     }
 
-    if (!DATA_BUS_CREATED) {
-        setupDataBus()
-        DATA_BUS_CREATED = true
-    }
-
     if (IFRAME) {
         remove()
     }
+
+    setupDataBus()
 
     CURRENT_PARAMS = parms
 
@@ -139,7 +135,5 @@ function setLoadingTimeout() {
 }
 
 function clearLoadingTimeout() {
-    if (TIMEOUT_FN) {
-        clearTimeout(TIMEOUT_FN)
-    }
+    clearTimeout(TIMEOUT_FN)
 }
