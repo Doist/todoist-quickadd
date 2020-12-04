@@ -15,6 +15,7 @@ npm install @doist/todoist-quickadd
 yarn add @doist/todoist-quickadd
 ```
 
+
 ## Usage (vanilla JavaScript)
 
 ```javascript
@@ -67,9 +68,27 @@ function Todoist() {
 ```
 
 
+## showQuickAdd API
+
+The `showQuickAdd` function can take the following parameters. All of them are
+optional:
+
+| Name           | Type                    | Description                                                                                 |
+| -------------- | ----------------------- | ------------------------------------------------------------------------------------------- |
+| content        | string                  | The preset content                                                                          |
+| priority       | number between 1 and 4  | The preset priority                                                                         |
+| theme          | number between 1 and 11 | Force a specific Todoist theme (e.g, `2` for Todoist Red,<br>and `11` for Todoist Darkmode) |
+| project_id     | number                  | The preset project (by default it's the Inbox)                                              |
+| onAdd          | (item: any) => void     | Callback that will be called when a task is added.                                          |
+| onClose        | () => void              | Callback that will be called when the Quick Add is closed                                   |
+| onLoadingError | () => void              | Callback that will be called when the Quick Add fails to load                               |
+| todoistHost    | string                  | An optional Todoist host, e.g. `staging.todoist.com`                                        |
+
+
 ## Changelog
 
 We're maintaining a [changelog](./CHANGELOG.md) in this repository. Our versioning follows [semantic versioning](https://semver.org/).
+
 
 ## Releasing
 
@@ -77,9 +96,11 @@ A new version of todoist-quickadd is published both on npm and GitHub Package Re
 
 The Action will release the version number that's specified inside the `package.json`'s `version` field so make sure that it reflects the version you want to publish. Additionally, the Action can be triggered manually in case something went wrong in the automation.
 
+
 ## Contributing
 
 Contributions are welcome.
+
 
 ## License
 
