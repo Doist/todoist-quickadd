@@ -8,6 +8,7 @@ type ShowParams = {
     project_id?: number
     onAdd?: (item: any) => void
     onClose?: () => void
+    onLoadingError?: () => void
 }
 
 // Constants
@@ -126,7 +127,11 @@ function teardownDataBus() {
 function setLoadingTimeout() {
     TIMEOUT_FN = setTimeout(() => {
         if (!LOADED) {
-            alert('Could not load Todoist Quick Add. Please try again later.')
+            if (CURRENT_PARAMS && CURRENT_PARAMS.onLoadingError) {
+                CURRENT_PARAMS.onLoadingError()
+            } else {
+                alert('Could not load Todoist Quick Add. Please try again later.')
+            }
             remove()
         }
     }, LOADING_TIMEOUT)
