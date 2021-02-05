@@ -29,7 +29,7 @@ export function showQuickAdd(parms: ShowParams = {}) {
     let content = parms.content
     if (!content) {
         const title = document.title.replace(/\[/g, '(').replace(/\]/g, ')')
-        content = '[' + title + ']' + '(' + window.location + ')'
+        content = '[' + title + '](' + window.location + ')'
     }
 
     if (IFRAME) {
@@ -109,7 +109,7 @@ function remove() {
 
 function dataBus(event: MessageEvent) {
     const data = event.data
-    if (data && data.service == 'Todoist Quick Add SDK') {
+    if (data && data.service === 'Todoist Quick Add SDK') {
         switch (data.type) {
             case 'LOADED_ADD_VIEW':
                 LOADED = true
