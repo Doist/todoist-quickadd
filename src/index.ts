@@ -62,8 +62,8 @@ export function showQuickAdd(parms: ShowParams = {}) {
          * We're opening the quick add page in a new window. The window will be
          * centered on the screen.
          */
-        const width = 450
-        const height = 550
+        const width = 540
+        const height = 720
         const left = window.screen.availWidth / 2 - width / 2
         const top = window.screen.availHeight / 2 - height / 2
         var windowFeatures =
