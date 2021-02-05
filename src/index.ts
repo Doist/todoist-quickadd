@@ -6,6 +6,7 @@ type ShowParams = {
     date?: string
     theme?: number
     project_id?: number
+    view_mode?: 'window'
     onAdd?: (item: any) => void
     onClose?: () => void
     onLoadingError?: () => void
@@ -15,6 +16,7 @@ type ShowParams = {
 const LOADING_TIMEOUT = 5000 // 5 seconds
 let TIMEOUT_FN: ReturnType<typeof setTimeout>
 let IFRAME: HTMLElement | null = null
+let WINDOW: Window | null = null
 let LOADED = false
 let CURRENT_PARAMS: ShowParams | null = null
 
@@ -53,34 +55,54 @@ export function showQuickAdd(parms: ShowParams = {}) {
     if (parms.project_id) {
         urlParms += '&project_id=' + encodeURIComponent(parms.project_id)
     }
-    iframe.src = 'https://' + todoistHost + '/add' + urlParms
 
-    const iframeStyle = `
-        width: 100vw !important;
-        height: 100vh !important;
-        border: 0 !important;
-        margin: 0 !important;
-        position: fixed !important;
-        z-index: 10000000 !important;
-        top: 0 !important;
-        left: 0 !important;
-        background: rgba(0, 0, 0, 0.3) !important;`
+    const url = 'https://' + todoistHost + '/add' + urlParms
+    if (parms.view_mode === 'window') {
+        /**
+         * We're opening the quick add page in a new window. The window will be
+         * centered on the screen.
+         */
+        const width = 450
+        const height = 550
+        const left = window.screen.availWidth / 2 - width / 2
+        const top = window.screen.availHeight / 2 - height / 2
+        var windowFeatures =
+            'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, copyhistory=no,'
 
-    iframe.setAttribute('style', iframeStyle)
-    document.body.appendChild(iframe)
-
-    IFRAME = iframe
-
-    setLoadingTimeout()
+        windowFeatures +=
+            'width=' + width + ', height=' + height + ', top=' + top + ', left=' + left
+        windowFeatures += 'screenX=' + left + ',screenY=' + top
+        WINDOW = window.open(url, 'todoist-quickadd-window', windowFeatures)
+    } else {
+        iframe.src = url
+        const iframeStyle = `
+            width: 100vw !important;
+            height: 100vh !important;
+            border: 0 !important;
+            margin: 0 !important;
+            position: fixed !important;
+            z-index: 10000000 !important;
+            top: 0 !important;
+            left: 0 !important;
+            background: rgba(0, 0, 0, 0.3) !important;`
+        iframe.setAttribute('style', iframeStyle)
+        document.body.appendChild(iframe)
+        IFRAME = iframe
+        setLoadingTimeout()
+    }
 }
 
 function remove() {
     if (IFRAME) {
         IFRAME.remove()
     }
+    if (WINDOW) {
+        WINDOW.close()
+    }
     teardownDataBus()
     clearLoadingTimeout()
     IFRAME = null
+    WINDOW = null
     LOADED = false
     CURRENT_PARAMS = null
 }
