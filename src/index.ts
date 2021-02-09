@@ -12,10 +12,7 @@ type ShowParams = {
 }
 
 // Constants
-const LOADING_TIMEOUT = 5000 // 5 seconds
-let TIMEOUT_FN: ReturnType<typeof setTimeout>
-let IFRAME: HTMLElement | null = null
-let LOADED = false
+let WINDOW: Window | null = null
 let CURRENT_PARAMS: ShowParams | null = null
 
 export function showQuickAdd(parms: ShowParams = {}) {
@@ -27,18 +24,17 @@ export function showQuickAdd(parms: ShowParams = {}) {
     let content = parms.content
     if (!content) {
         const title = document.title.replace(/\[/g, '(').replace(/\]/g, ')')
-        content = '[' + title + ']' + '(' + window.location + ')'
+        content = '[' + title + '](' + window.location + ')'
     }
 
-    if (IFRAME) {
-        remove()
+    if (WINDOW) {
+        WINDOW.close()
     }
 
     setupDataBus()
 
     CURRENT_PARAMS = parms
 
-    const iframe = document.createElement('iframe')
     let urlParms = '?'
     urlParms += 'content=' + encodeURIComponent(content)
     if (parms.priority) {
@@ -53,49 +49,44 @@ export function showQuickAdd(parms: ShowParams = {}) {
     if (parms.project_id) {
         urlParms += '&project_id=' + encodeURIComponent(parms.project_id)
     }
-    iframe.src = 'https://' + todoistHost + '/add' + urlParms
 
-    const iframeStyle = `
-        width: 100vw !important;
-        height: 100vh !important;
-        border: 0 !important;
-        margin: 0 !important;
-        position: fixed !important;
-        z-index: 10000000 !important;
-        top: 0 !important;
-        left: 0 !important;
-        background: rgba(0, 0, 0, 0.3) !important;`
+    urlParms += 'view_mode=window'
 
-    iframe.setAttribute('style', iframeStyle)
-    document.body.appendChild(iframe)
+    const url = 'https://' + todoistHost + '/add' + urlParms
 
-    IFRAME = iframe
+    /**
+     * We're opening the quick add page in a new window. The window will be
+     * centered on the screen.
+     */
+    const width = 550
+    const height = 500
+    const left = window.screen.availWidth / 2 - width / 2
+    const top = window.screen.availHeight / 2 - height / 2
+    var windowFeatures =
+        'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, copyhistory=no,'
 
-    setLoadingTimeout()
+    windowFeatures += 'width=' + width + ', height=' + height + ', top=' + top + ', left=' + left
+    windowFeatures += 'screenX=' + left + ',screenY=' + top
+    WINDOW = window.open(url, 'todoist-quickadd-window', windowFeatures)
 }
 
 function remove() {
-    if (IFRAME) {
-        IFRAME.remove()
+    if (WINDOW) {
+        WINDOW.close()
     }
     teardownDataBus()
-    clearLoadingTimeout()
-    IFRAME = null
-    LOADED = false
+    WINDOW = null
     CURRENT_PARAMS = null
 }
 
 function dataBus(event: MessageEvent) {
     const data = event.data
-    if (data && data.service == 'Todoist Quick Add SDK') {
+    if (data && data.service === 'Todoist Quick Add SDK') {
         switch (data.type) {
             case 'LOADED_ADD_VIEW':
-                LOADED = true
-                clearLoadingTimeout()
                 break
 
             case 'TASK_ADDED':
-                clearLoadingTimeout()
                 if (CURRENT_PARAMS && CURRENT_PARAMS.onAdd) {
                     CURRENT_PARAMS.onAdd(data.data.item)
                 }
@@ -103,7 +94,6 @@ function dataBus(event: MessageEvent) {
                 break
 
             case 'CLOSE_ADD_VIEW':
-                clearLoadingTimeout()
                 if (CURRENT_PARAMS && CURRENT_PARAMS.onClose) {
                     CURRENT_PARAMS.onClose()
                 }
@@ -119,21 +109,4 @@ function setupDataBus() {
 
 function teardownDataBus() {
     window.removeEventListener('message', dataBus)
-}
-
-function setLoadingTimeout() {
-    TIMEOUT_FN = setTimeout(() => {
-        if (!LOADED) {
-            if (CURRENT_PARAMS && CURRENT_PARAMS.onLoadingError) {
-                CURRENT_PARAMS.onLoadingError()
-            } else {
-                alert('Could not load Todoist Quick Add. Please try again later.')
-            }
-            remove()
-        }
-    }, LOADING_TIMEOUT)
-}
-
-function clearLoadingTimeout() {
-    clearTimeout(TIMEOUT_FN)
 }
