@@ -50,7 +50,7 @@ export function showQuickAdd(parms: ShowParams = {}) {
         urlParms += '&project_id=' + encodeURIComponent(parms.project_id)
     }
 
-    urlParms += 'view_mode=window'
+    urlParms += '&view_mode=window'
 
     const url = 'https://' + todoistHost + '/add' + urlParms
 
