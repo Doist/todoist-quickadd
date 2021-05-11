@@ -19,7 +19,7 @@ yarn add @doist/todoist-quickadd
 ## Usage (vanilla JavaScript)
 
 ```javascript
-import {showQuickAdd} from '@doist/todoist.quickadd'
+import {showQuickAdd} from '@doist/todoist-quickadd'
 
 showQuickAdd({
     content: 'Hello world',
@@ -34,7 +34,7 @@ showQuickAdd({
 ```javascript
 import { useState, useEffect } from 'react'
 
-import {showQuickAdd} from '@doist/todoist.quickadd'
+import {showQuickAdd} from '@doist/todoist-quickadd'
 
 function Todoist() {
     const [content, setContent] = useState<string | null>(null)
