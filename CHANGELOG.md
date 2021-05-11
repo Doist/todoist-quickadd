@@ -4,4 +4,4 @@ todoist-quickadd follows [semantic versioning](https://semver.org/) and doesn't 
 
 ## v1.0.5
 
-- Initial release
+-   Initial release
