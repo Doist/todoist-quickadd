@@ -4,7 +4,6 @@ Add the powerful Todoist Quick Add anywhere on the web. The experience is simple
 
 The Todoist Quick Add also supports all of the powerful features, such as natrual language parsing.
 
-
 ## Installation
 
 Use [npm](https://www.npmjs.com/get-npm) or [yarn](https://yarnpkg.com/lang/en/docs/install/) to install:
@@ -15,11 +14,10 @@ npm install @doist/todoist-quickadd
 yarn add @doist/todoist-quickadd
 ```
 
-
 ## Usage (vanilla JavaScript)
 
 ```javascript
-import {showQuickAdd} from '@doist/todoist.quickadd'
+import { showQuickAdd } from '@doist/todoist-quickadd'
 
 showQuickAdd({
     content: 'Hello world',
@@ -28,16 +26,15 @@ showQuickAdd({
 })
 ```
 
-
 ## Usage (React)
 
 ```javascript
 import { useState, useEffect } from 'react'
 
-import {showQuickAdd} from '@doist/todoist.quickadd'
+import { showQuickAdd } from '@doist/todoist-quickadd'
 
 function Todoist() {
-    const [content, setContent] = useState<string | null>(null)
+    const [content, setContent] = (useState < string) | (null > null)
 
     // Set up store listener
     useEffect(() => {
@@ -67,7 +64,6 @@ function Todoist() {
 }
 ```
 
-
 ## showQuickAdd API
 
 The `showQuickAdd` function can take the following parameters. All of them are
@@ -84,11 +80,9 @@ optional:
 | onLoadingError | () => void              | Callback that will be called when the Quick Add fails to load                               |
 | todoistHost    | string                  | An optional Todoist host, e.g. `staging.todoist.com`                                        |
 
-
 ## Changelog
 
 We're maintaining a [changelog](./CHANGELOG.md) in this repository. Our versioning follows [semantic versioning](https://semver.org/).
-
 
 ## Releasing
 
@@ -96,11 +90,9 @@ A new version of todoist-quickadd is published both on npm and GitHub Package Re
 
 The Action will release the version number that's specified inside the `package.json`'s `version` field so make sure that it reflects the version you want to publish. Additionally, the Action can be triggered manually in case something went wrong in the automation.
 
-
 ## Contributing
 
 Contributions are welcome.
-
 
 ## License
 
