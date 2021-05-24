@@ -2,7 +2,7 @@
 
 Add the powerful Todoist Quick Add anywhere on the web. The experience is simple, beautiful, and fast.
 
-The Todoist Quick Add also supports all of the powerful features, such as natrual language parsing.
+The Todoist Quick Add also supports all of the powerful features, such as natural language parsing.
 
 ## Installation
 
