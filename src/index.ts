@@ -63,10 +63,10 @@ export function showQuickAdd(parms: ShowParams = {}) {
     const left = window.screen.availWidth / 2 - width / 2
     const top = window.screen.availHeight / 2 - height / 2
     var windowFeatures =
-        'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, copyhistory=no,'
+        'toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,copyhistory=no,'
 
-    windowFeatures += 'width=' + width + ', height=' + height + ', top=' + top + ', left=' + left
-    windowFeatures += 'screenX=' + left + ',screenY=' + top
+    windowFeatures += 'width=' + width + ',height=' + height + ',top=' + top + ',left=' + left
+    windowFeatures += ',screenX=' + left + ',screenY=' + top
     WINDOW = window.open(url, 'todoist-quickadd-window', windowFeatures)
 }
 
