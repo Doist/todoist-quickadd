@@ -43,7 +43,7 @@ export function showQuickAdd(parms: ShowParams = {}) {
     if (parms.date) {
         urlParms += '&date=' + encodeURIComponent(parms.date)
     }
-    if (parms.theme) {
+    if (parms.theme || parms.theme === 0) {
         urlParms += '&theme=' + encodeURIComponent(parms.theme)
     }
     if (parms.project_id) {
