@@ -36,7 +36,7 @@ jobs:
                   scope: '@doist'
             - run: npm publish
               env:
-                  NODE_AUTH_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
+                  NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
             - name: Publish to npm registry
               uses: actions/setup-node@v1
