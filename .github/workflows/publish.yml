@@ -5,6 +5,12 @@ on:
         types: [created]
     workflow_dispatch:
 
+permissions:
+    # Enable the use of OIDC for trusted publishing and npm provenance
+    id-token: write
+    # Enable the use of GitHub Packages registry
+    packages: write
+
 jobs:
     publish:
         runs-on: ubuntu-latest
@@ -13,10 +19,13 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v4
 
-            - name: Setup Node 12
-              uses: actions/setup-node@v1
+            - name: Setup Node
+              uses: actions/setup-node@v3
               with:
-                  node-version: 12
+                  node-version: 24
+
+            - name: Ensure npm 11.5.1 or later is installed
+              run: npm install -g npm@latest
 
             - name: Install dependencies
               run: npm ci
@@ -30,21 +39,22 @@ jobs:
               run: npm run build
 
             - name: Publish to GitHub Package Registry
-              uses: actions/setup-node@v1
+              uses: actions/setup-node@v3
               with:
-                  node-version: 12
+                  node-version: 24
                   registry-url: https://npm.pkg.github.com/
                   scope: '@doist'
             - run: npm publish
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+            - name: Clear npm config between GitHub/npm registries
+              run: rm -f $NPM_CONFIG_USERCONFIG
+
             - name: Publish to npm registry
-              uses: actions/setup-node@v1
+              uses: actions/setup-node@v3
               with:
-                  node-version: 12
+                  node-version: 24
                   registry-url: https://registry.npmjs.org/
                   scope: '@doist'
-            - run: npm publish
-              env:
-                  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+            - run: npm publish --provenance --access public
