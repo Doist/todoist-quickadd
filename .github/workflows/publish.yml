@@ -17,10 +17,10 @@ jobs:
         timeout-minutes: 60
         steps:
             - name: Checkout
-              uses: actions/checkout@v4
+              uses: actions/checkout@v6
 
             - name: Setup Node
-              uses: actions/setup-node@v3
+              uses: actions/setup-node@v6
               with:
                   node-version: 24
 
@@ -39,7 +39,7 @@ jobs:
               run: npm run build
 
             - name: Publish to GitHub Package Registry
-              uses: actions/setup-node@v3
+              uses: actions/setup-node@v6
               with:
                   node-version: 24
                   registry-url: https://npm.pkg.github.com/
@@ -52,7 +52,7 @@ jobs:
               run: rm -f $NPM_CONFIG_USERCONFIG
 
             - name: Publish to npm registry
-              uses: actions/setup-node@v3
+              uses: actions/setup-node@v6
               with:
                   node-version: 24
                   registry-url: https://registry.npmjs.org/
